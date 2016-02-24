@@ -5,7 +5,7 @@ A Node.js command line interface (CLI) for performing pattern based Redis functi
 
 ## Installation
 
-Coming soon
+    $ npm install redis-utils-cli
 
 ## Usage
 

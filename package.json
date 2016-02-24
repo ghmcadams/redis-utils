@@ -1,5 +1,5 @@
 {
-  "name": "redis-utils",
+  "name": "redis-utils-cli",
   "version": "1.0.0",
   "description": "Simple command line tools for Redis",
   "main": "index.js",
