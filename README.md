@@ -1,11 +1,11 @@
-redis-utils
-============
+Redis Utilities
+===============
 
 A Node.js command line interface (CLI) for performing pattern based Redis functions
 
 ## Installation
 
-    $ npm install redis-utils-cli
+    $ npm install redis-utils-cli -g
 
 ## Usage
 
@@ -15,14 +15,14 @@ To copy all keys matching the pattern 'users:*'
 
 Arguments:
 
-    <source>       The address for the source Redis database (follows this format: [auth@]<hostname>[:port][/db] )
-    <destination>  The address for the destination Redis database (follows this format: [auth@]<hostname>[:port][/db] )
+ - <source>       The address for the source Redis database (follows this format: [auth@]<hostname>[:port][/db] )
+ - <destination>  The address for the destination Redis database (follows this format: [auth@]<hostname>[:port][/db] )
 
 Options include:
 
-    -p <pattern> (Key pattern. Default: *)
-    -o           (Overwrite. Default: *)
-    -m <mode>    (Hash overwrite mode (key|field). Default: key)
+ - -p <pattern> (Key pattern. Default: *)
+ - -o           (Overwrite. Default (when omitted): false)
+ - -m <mode>    (Hash overwrite mode (key|field). Default: key)
 
 
 To delete all keys matching the pattern 'users:*'
@@ -31,8 +31,8 @@ To delete all keys matching the pattern 'users:*'
 
 Arguments:
 
-    <redis>    The address for the Redis database (follows this format: [auth@]<hostname>[:port][/db] )
-    <pattern>  The key pattern. (Default: *)
+ - <redis>    The address for the Redis database (follows this format: [auth@]<hostname>[:port][/db] )
+ - <pattern>  The key pattern. (Default: *)
 
 
 To count all keys matching the pattern 'users:*'
@@ -41,8 +41,8 @@ To count all keys matching the pattern 'users:*'
 
 Arguments:
 
-    <redis>    The address for the Redis database (follows this format: [auth@]<hostname>[:port][/db] )
-    <pattern>  The key pattern. (Default: *)
+ - <redis>    The address for the Redis database (follows this format: [auth@]<hostname>[:port][/db] )
+ - <pattern>  The key pattern. (Default: *)
 
 
 To list all keys matching the pattern 'users:*'
@@ -51,8 +51,8 @@ To list all keys matching the pattern 'users:*'
 
 Arguments:
 
-    <redis>    The address for the Redis database (follows this format: [auth@]<hostname>[:port][/db] )
-    <pattern>  The key pattern. (Default: *)
+ - <redis>    The address for the Redis database (follows this format: [auth@]<hostname>[:port][/db] )
+ - <pattern>  The key pattern. (Default: *)
 
 	
 
@@ -62,7 +62,7 @@ It is important to note that these commands use the Redis command `keys` and
 by their recommendation, should be used only in production environments with extreme
 care as it may ruin performance when executed against large databases.
 
-See http://redis.io/commands/keys for more information.
+Read the [Redis Documentation](http://redis.io/commands/keys) for more information.
 
 ## License
 

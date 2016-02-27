@@ -1,6 +1,6 @@
 {
   "name": "redis-utils-cli",
-  "version": "1.0.2",
+  "version": "1.0.4",
   "description": "Simple command line tools for Redis",
   "main": "index.js",
   "preferGlobal": true,
