@@ -1,60 +1,103 @@
 Redis Utilities
 ===============
 
-A Node.js command line interface (CLI) for performing pattern based Redis functions
+A Node.js based command line interface (CLI) for performing pattern based Redis functions
 
 ## Installation
 
     $ npm install redis-utils-cli -g
 
-## Usage
 
-To copy all keys matching the pattern 'users:*'
+## Commands
 
-    $ redis-utils copy <source> <destination> -p users:*
+**Copy**  
+Copy keys from one Redis instance to another
 
-Arguments:
+**Arguments**
 
- - <source>       The address for the source Redis database (follows this format: [auth@]<hostname>[:port][/db] )
- - <destination>  The address for the destination Redis database (follows this format: [auth@]<hostname>[:port][/db] )
+ - \<source\>       The address for the source Redis database (follows this format: [auth@]\<hostname\>[:port][/db] )
+ - \<destination\>  The address for the destination Redis database (follows this format: [auth@]\<hostname\>[:port][/db] )
 
-Options include:
+**Options include**
 
- - -p <pattern> (Key pattern. Default: *)
+ - -p \<pattern\> (Key pattern. Default: *)
  - -o           (Overwrite. Default (when omitted): false)
- - -m <mode>    (Hash overwrite mode (key|field). Default: key)
+ - -m \<mode\>    (Hash overwrite mode (key|field). Default: key)
+
+---
+
+**Delete**  
+Delete keys from a Redis instance.
+
+**Arguments**
+
+ - \<redis\>    The address for the Redis database (follows this format: [auth@]\<hostname\>[:port][/db] )
+ - \<pattern\>  The key pattern. (Default: *)
+
+---
+
+**List**  
+List all keys and hash fields that match a specified pattern.
+
+**Arguments**
+
+ - \<redis\>    The address for the Redis database (follows this format: [auth@]\<hostname\>[:port][/db] )
+ - \<pattern\>  The key pattern. (Default: *)
+
+---
+
+**Count**  
+Display a numeric count of all keys that match a specified pattern.
+
+**Arguments**
+
+ - \<redis\>    The address for the Redis database (follows this format: [auth@]\<hostname\>[:port][/db] )
+ - \<pattern\>  The key pattern. (Default: *)
 
 
-To delete all keys matching the pattern 'users:*'
+## Supported Glob-Style Patterns
 
-    $ redis-utils del <redis> users:*
+ - `h?llo` matches hello, hallo and hxllo
+ - `h*llo` matches hllo and heeeello
+ - `h[ae]llo` matches hello and hallo, but not hillo
+ - `h[^e]llo` matches hallo, hbllo, ... but not hello
+ - `h[a-b]llo` matches hallo and hbllo
 
-Arguments:
+Use \ to escape special characters if you want to match them verbatim.
 
- - <redis>    The address for the Redis database (follows this format: [auth@]<hostname>[:port][/db] )
- - <pattern>  The key pattern. (Default: *)
+(basically, what you are already familiar with using Redis)
+
+## Examples
+
+    $ redis-utils copy someauth@10.2.1.44/0 127.0.0.1/0 -p users:*
+
+Copies all keys matching the pattern `users:*` from `10.2.1.44, db: 0` into `127.0.0.1, db: 0`  
+(Because `-o` was not included, it would only copy data if the keys do not exist in destination)
+
+For hashes, if you want to copy data based on the existence of hash fields instead of keys, use the `-m field` option. 
+
+<br>
+
+    $ redis-utils del 127.0.0.1 users:*
+
+Deletes all keys matching the pattern `users:*` from `127.0.0.1, db: 0`
+
+<br>
 
 
-To count all keys matching the pattern 'users:*'
+    $ redis-utils list 127.0.0.1 users:*
 
-    $ redis-utils count <redis> users:*
+Displays in the terminal, all keys (with some additional details) matching the pattern `users:*` from `127.0.0.1, db: 0`
 
-Arguments:
-
- - <redis>    The address for the Redis database (follows this format: [auth@]<hostname>[:port][/db] )
- - <pattern>  The key pattern. (Default: *)
+<br>
 
 
-To list all keys matching the pattern 'users:*'
+    $ redis-utils count 127.0.0.1 users:*
 
-    $ redis-utils list <redis> users:*
+Displays in the terminal, a numeric count of all keys matching the pattern `users:*` from `127.0.0.1, db: 0`
 
-Arguments:
+<br>
 
- - <redis>    The address for the Redis database (follows this format: [auth@]<hostname>[:port][/db] )
- - <pattern>  The key pattern. (Default: *)
-
-	
 
 ## IMPORTANT NOTE
 
