@@ -3,6 +3,8 @@ Redis Utilities
 
 A Node.js based command line interface (CLI) for performing pattern based Redis functions
 
+[![NPM](https://nodei.co/npm/redis-utils-cli.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/redis-utils-cli/)
+
 ## Installation
 
     $ npm install redis-utils-cli -g
