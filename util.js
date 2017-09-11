@@ -27,7 +27,7 @@ module.exports = {
     // check: [auth@]<hostname>[:port]
 
     // Check the first part for the auth
-    var atPosition = check.indexOf('@');
+    var atPosition = check.lastIndexOf('@');
     if (atPosition > 0) {
       url.auth = check.substring(0, atPosition);
       check = check.slice(atPosition + 1);
