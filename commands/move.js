@@ -19,8 +19,7 @@ module.exports = function(params, callback) {
   params.destination.db = params.destination.db || 0;
 
   params.pattern = params.pattern || '*';
-  params.overwrite = params.overwrite || false;
-  params.hashOverwriteMode = params.hashOverwriteMode || 'field';
+  params.overwriteMode = params.overwriteMode || 'skip';
 
 
   // Connect to Redis Instances
@@ -143,22 +142,15 @@ module.exports = function(params, callback) {
               };
 
               // For performance reasons, we will only get the value if there's a chance we'll write it
-              // to the destination.  If the key exists in destination, and overwrite is false, then
-              // don't take the time to get it from the source.
+              // to the destination.
               if (!keyExists) {
                 getValue();
               } else {
-                if (params.overwrite === true) {
-                  getValue();
+                if (params.overwriteMode === 'skip') {
+                  console.log('Skipping key %s.', key);
+                  return next(null);
                 } else {
-                  // In the case of a hash, there may be a field that does not exist
-                  // Get the values here, and decide later if we write them based on field existence
-                  if (params.hashOverwriteMode === 'field' && keyType === 'hash') {
-                    getValue();
-                  } else {
-                    console.log('Skipping key %s.', key);
-                    return next(null);
-                  }
+                  getValue();
                 }
               }
             },
@@ -248,8 +240,7 @@ module.exports = function(params, callback) {
                     break;
                   case 'hash':
                     console.log('Writing hash values to key %s to destination...', key);
-                    // If overwrite is true, existing fields have been deleted by this point
-                    if (params.overwrite === true) {
+                    if (params.overwriteMode === 'replace' || params.overwriteMode === 'merge') {
                       destinationDb.hmset(key, keyValue, function(err, reply) {
                         if (err) {
                           return next(err);
@@ -265,8 +256,8 @@ module.exports = function(params, callback) {
                           });
                         }
                       });
-                    } else {
-                      // If overwrite is false, only write fields that do not exist (using hsetnx)
+                    } else if (params.overwriteMode === 'add' || params.overwriteMode === 'skip') {
+                      // Only write fields that do not exist (using hsetnx)
                       var hashValuesWritten = 0;
                       async.each(Object.keys(keyValue), function(field, eachFieldCallback) {
                         destinationDb.hsetnx(key, field, keyValue[field], function(hsetnxErr, hsetnxCount) {
@@ -306,45 +297,39 @@ module.exports = function(params, callback) {
               if (!keyExists) {
                 writeValue();
               } else {
-                // if the key exists and overwrite is true, write the value after deleting existing key
-                // if the key exists but overwrite is false, do not write value
                 if (keyType === 'hash') {
-                  if (params.overwrite === true) {
-                    if (params.hashOverwriteMode === 'field') {
-                      async.each(Object.keys(keyValue), function(field, eachFieldCallback) {
-                        destinationDb.hdel(key, field, function(delFieldErr, delFieldReply) {
-                          if (delFieldErr) {
-                            return eachFieldCallback(delFieldErr);
-                          } else {
-                            return eachFieldCallback(null, delFieldReply);
-                          }
-                        });
-                      },
-                      function(err) {
-                        if (err) {
-                          return next(err);
+                  if (params.overwriteMode === 'merge') {
+                    async.each(Object.keys(keyValue), function(field, eachFieldCallback) {
+                      destinationDb.hdel(key, field, function(delFieldErr, delFieldReply) {
+                        if (delFieldErr) {
+                          return eachFieldCallback(delFieldErr);
                         } else {
-                          writeValue();
+                          return eachFieldCallback(null, delFieldReply);
                         }
                       });
-                    } else {
-                      destinationDb.del(key, function(delKeyErr, delKeyReply) {
-                        if (delKeyErr) {
-                          return next(delKeyErr);
-                        } else {
-                          writeValue();
-                        }
-                      });
-                    }
-                  } else {
-                    if (params.hashOverwriteMode === 'field') {
-                      writeValue();
-                    } else {
-                      return next(null);
-                    }
+                    },
+                    function(err) {
+                      if (err) {
+                        return next(err);
+                      } else {
+                        writeValue();
+                      }
+                    });
+                  } else if (params.overwriteMode === 'replace') {
+                    destinationDb.del(key, function(delKeyErr, delKeyReply) {
+                      if (delKeyErr) {
+                        return next(delKeyErr);
+                      } else {
+                        writeValue();
+                      }
+                    });
+                  } else if (params.overwriteMode === 'add') {
+                    writeValue();
+                  } else if (params.overwriteMode === 'skip') {
+                    return next(null);
                   }
                 } else {
-                  if (params.overwrite === true) {
+                  if (params.overwriteMode === 'replace') {
                     return destinationDb.del(key, function(delKeyErr, delKeyReply) {
                       if (delKeyErr) {
                         return next(delKeyErr);
@@ -352,7 +337,9 @@ module.exports = function(params, callback) {
                         writeValue();
                       }
                     });
-                  } else {
+                  } else if (params.overwriteMode === 'merge' || params.overwriteMode === 'add') {
+                    writeValue();
+                  } else if (params.overwriteMode === 'skip') {
                     return next(null);
                   }
                 }

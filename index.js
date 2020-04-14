@@ -270,8 +270,7 @@ program
   .usage('<source> <destination> [options]')
 
   .option('-p, --pattern <p>', 'The pattern with which to filter keys', '*')
-  .option('-o, --overwrite', 'Overwrite existing keys')
-  .option('-m, --hashOverwriteMode <mode>', 'Overwrite mode for hash keys (field or key)', /^(field|key)$/i, 'key')
+  .option('-o, --overwriteMode <mode>', 'Overwrite mode (skip, add, merge or replace)', /^(skip|add|merge|replace)$/i, 'skip')
   .option('-s, --pageSize <size>', 'The page size to use when scanning keys', 1000)
 
   .on('--help', function() {
@@ -285,11 +284,17 @@ program
     console.log('               auth: not required.');
     console.log('               port: defaults to 6379.');
     console.log('               db: defaults to 0.');
+    console.log('');
+    console.log('    overwriteMode');
+    console.log('         skip (default): if the key already exists at destination DB it will not be moved');
+    console.log('         add: if the key already exists it will try to move it preserving the destination key values');
+    console.log('         merge: like add but it will overwrite part of the destination key values');
+    console.log('         replace: if the key already exists it will overwrite all the key values');
     console.log();
     console.log('  Examples:');
     console.log();
     console.log('    $ move myauth@10.1.1.4/0 127.0.0.1/0');
-    console.log('    $ move myauth@10.1.1.4/0 127.0.0.1/0 -o -m key -p user:55d54:*');
+    console.log('    $ move myauth@10.1.1.4/0 127.0.0.1/0 -o replace -p user:55d54:*');
     console.log();
   })
 
@@ -321,9 +326,8 @@ program
       'with page size:',
       '    ' + options.pageSize + '',
       '',
-      'overwrite settings:',
-      '    Overwrite: ' + ((!!options.overwrite).toString().toLowerCase()),
-      '    Hash Overwrite Mode: ' + options.hashOverwriteMode,
+      'overwrite mode:',
+      '    ' + options.overwriteMode,
       ''
     ];
 
@@ -333,8 +337,7 @@ program
       source: source,
       destination: destination,
       pattern: options.pattern,
-      overwrite: options.overwrite,
-      hashOverwriteMode: options.hashOverwriteMode,
+      overwriteMode: options.overwriteMode,
       pageSize: options.pageSize
     };
 
