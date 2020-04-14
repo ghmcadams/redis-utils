@@ -1,0 +1,233 @@
+select 0
+
+del test_01_string
+del test_02_string
+del test_03_string
+del test_04_string
+del test_05_string
+del test_01_list
+del test_02_list
+del test_03_list
+del test_04_list
+del test_05_list
+del test_01_set
+del test_02_set
+del test_03_set
+del test_04_set
+del test_05_set
+del test_01_zset
+del test_02_zset
+del test_03_zset
+del test_04_zset
+del test_05_zset
+del test_01_hash
+del test_02_hash
+del test_03_hash
+del test_04_hash
+del test_05_hash
+
+set test_01_string string_01
+set test_02_string string_02
+set test_03_string string_03
+set test_04_string string_04
+
+lpush test_01_list list_01_a
+lpush test_01_list list_01_b
+lpush test_01_list list_01_c
+lpush test_01_list list_01_d
+lpush test_02_list list_02_a
+lpush test_02_list list_02_b
+lpush test_02_list list_02_c
+lpush test_02_list list_02_d
+lpush test_03_list list_03_a
+lpush test_03_list list_03_b
+lpush test_03_list list_03_c
+lpush test_03_list list_03_d
+lpush test_04_list list_04_a
+lpush test_04_list list_04_b
+lpush test_04_list list_04_c
+lpush test_04_list list_04_d
+
+sadd test_01_set set_01_a
+sadd test_01_set set_01_b
+sadd test_01_set set_01_c
+sadd test_01_set set_01_d
+sadd test_02_set set_02_a
+sadd test_02_set set_02_b
+sadd test_02_set set_02_c
+sadd test_02_set set_02_d
+sadd test_03_set set_03_a
+sadd test_03_set set_03_b
+sadd test_03_set set_03_c
+sadd test_03_set set_03_d
+sadd test_04_set set_04_a
+sadd test_04_set set_04_b
+sadd test_04_set set_04_c
+sadd test_04_set set_04_d
+
+zadd test_01_zset 1 zset_01_a
+zadd test_01_zset 2 zset_01_b
+zadd test_01_zset 3 zset_01_c
+zadd test_01_zset 4 zset_01_d
+zadd test_02_zset 1 zset_02_a
+zadd test_02_zset 2 zset_02_b
+zadd test_02_zset 3 zset_02_c
+zadd test_02_zset 4 zset_02_d
+zadd test_03_zset 1 zset_03_a
+zadd test_03_zset 2 zset_03_b
+zadd test_03_zset 3 zset_03_c
+zadd test_03_zset 4 zset_03_d
+zadd test_04_zset 1 zset_04_a
+zadd test_04_zset 2 zset_04_b
+zadd test_04_zset 3 zset_04_c
+zadd test_04_zset 4 zset_04_d
+
+hmset test_01_hash 1 hash_01_a
+hmset test_01_hash 2 hash_01_b
+hmset test_01_hash 3 hash_01_c
+hmset test_01_hash 4 hash_01_d
+hmset test_02_hash 1 hash_02_a
+hmset test_02_hash 2 hash_02_b
+hmset test_02_hash 3 hash_02_c
+hmset test_02_hash 4 hash_02_d
+hmset test_03_hash 1 hash_03_a
+hmset test_03_hash 2 hash_03_b
+hmset test_03_hash 3 hash_03_c
+hmset test_03_hash 4 hash_03_d
+hmset test_04_hash 1 hash_04_a
+hmset test_04_hash 2 hash_04_b
+hmset test_04_hash 3 hash_04_c
+hmset test_04_hash 4 hash_04_d
+
+expire test_01_string 1000000
+expire test_02_string 1000000
+expire test_04_string 1000000
+expire test_01_list 1000000
+expire test_02_list 1000000
+expire test_04_list 1000000
+expire test_01_set 1000000
+expire test_02_set 1000000
+expire test_04_set 1000000
+expire test_01_zset 1000000
+expire test_02_zset 1000000
+expire test_04_zset 1000000
+expire test_01_hash 1000000
+expire test_02_hash 1000000
+expire test_04_hash 1000000
+
+select 1
+
+del test_01_string
+del test_02_string
+del test_03_string
+del test_04_string
+del test_05_string
+del test_01_list
+del test_02_list
+del test_03_list
+del test_04_list
+del test_05_list
+del test_01_set
+del test_02_set
+del test_03_set
+del test_04_set
+del test_05_set
+del test_01_zset
+del test_02_zset
+del test_03_zset
+del test_04_zset
+del test_05_zset
+del test_01_hash
+del test_02_hash
+del test_03_hash
+del test_04_hash
+del test_05_hash
+
+set test_02_string string_02
+set test_03_string string_03
+set test_04_string string_04
+set test_05_string string_05
+
+lpush test_02_list list_02_a
+lpush test_02_list list_02_b
+lpush test_02_list list_02_c
+lpush test_02_list list_02_d
+lpush test_02_list list_02_e
+
+lpush test_03_list list_03_a
+lpush test_03_list list_03_b
+lpush test_03_list list_03_e
+
+lpush test_04_list list_04_e
+
+lpush test_05_list list_05_a
+lpush test_05_list list_05_b
+lpush test_05_list list_05_c
+lpush test_05_list list_05_d
+
+sadd test_02_set set_02_a
+sadd test_02_set set_02_b
+sadd test_02_set set_02_c
+sadd test_02_set set_02_d
+sadd test_02_set set_02_e
+
+sadd test_03_set set_03_a
+sadd test_03_set set_03_b
+sadd test_03_set set_03_e
+
+sadd test_04_set set_04_e
+
+sadd test_05_set set_05_a
+sadd test_05_set set_05_b
+sadd test_05_set set_05_c
+sadd test_05_set set_05_d
+
+zadd test_02_zset 1 zset_02_a
+zadd test_02_zset 2 zset_02_b
+zadd test_02_zset 3 zset_02_c
+zadd test_02_zset 4 zset_02_d
+zadd test_02_zset 5 zset_02_e
+
+zadd test_03_zset 1 zset_03_a
+zadd test_03_zset 2 zset_03_b
+zadd test_03_zset 5 zset_03_e
+
+zadd test_04_zset 5 zset_04_e
+
+zadd test_05_zset 1 zset_05_a
+zadd test_05_zset 2 zset_05_b
+zadd test_05_zset 3 zset_05_c
+zadd test_05_zset 4 zset_05_d
+
+hmset test_02_hash 1 hash_02_a
+hmset test_02_hash 2 hash_02_b
+hmset test_02_hash 3 hash_02_c
+hmset test_02_hash 4 hash_02_d
+hmset test_02_hash 5 hash_02_e
+
+hmset test_03_hash 1 hash_03_a
+hmset test_03_hash 2 hash_03_b
+hmset test_03_hash 5 hash_03_e
+
+hmset test_04_hash 5 hash_04_e
+
+hmset test_05_hash 1 hash_05_a
+hmset test_05_hash 2 hash_05_b
+hmset test_05_hash 3 hash_05_c
+hmset test_05_hash 4 hash_05_d
+
+expire test_01_string 2000000
+expire test_03_string 2000000
+expire test_05_string 2000000
+expire test_01_list 2000000
+expire test_03_list 2000000
+expire test_05_list 2000000
+expire test_01_set 2000000
+expire test_03_set 2000000
+expire test_05_set 2000000
+expire test_01_zset 2000000
+expire test_03_zset 2000000
+expire test_05_zset 2000000
+expire test_01_hash 2000000
+expire test_03_hash 2000000
+expire test_05_hash 2000000
