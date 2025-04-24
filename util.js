@@ -6,11 +6,19 @@ module.exports = {
       auth: '',
       hostname: '',
       port: 6379,
-      db: 0
+      db: 0,
+      tls: null
     };
 
     var check = address;
     // check: [auth@]<hostname>[:port][/db]
+
+    var hasTls = check.search('tls://') !== -1;
+    
+    if (hasTls) {
+      url.tls = true;
+      check = check.substring(6);
+    }
 
     // Check the last part for a db number
     var matches = check.match(/\/(\d+)$/);

@@ -8,13 +8,20 @@ module.exports = function(redisAddress, pattern, callback) {
   redisAddress.auth = redisAddress.auth || '';
   redisAddress.port = redisAddress.port || 6379;
   redisAddress.db = redisAddress.db || 0;
+  redisAddress.tls = redisAddress.tls || null;
 
   pattern = pattern || '*';
 
-  // Connect to the Redis instance
-  var db = redis.createClient(redisAddress.port, redisAddress.hostname, {
+  var options = {
     auth_pass: redisAddress.auth
-  });
+  };
+
+  if (redisAddress.tls !== null) {
+    options.tls = redisAddress.tls;
+  }
+  
+  // Connect to the Redis instance
+  var db = redis.createClient(redisAddress.port, redisAddress.hostname, options);
   db.select(redisAddress.db);
 
   // Get the keys that match the specified pattern
